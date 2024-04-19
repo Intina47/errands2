@@ -25,3 +25,40 @@
     }
   ]
 }
+
+//TODO: comment this out for testing
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "app.py",
+      "use": "@vercel/python",
+      "config": {
+        "maxLambdaSize": "15mb",
+        "runtime": "python3.10"
+      }
+    }
+  ],
+  "routes": [
+    {
+      "src": "/static/(.*)",
+      "dest": "/static/$1",
+      "headers": {
+        "cache-control": "s-maxage=31536000, immutable"
+      }
+    },
+    {
+      "src": "/(.*)",
+      "dest": "app.py"
+    }
+  ],
+  "projectSettings": {
+    "framework": "flask",
+    "buildCommand": "mkdir -p vercel_app && cp -R *.py templates static vercel_app/",
+    "outputDirectory": null,
+    "installCommand": "pip install -r requirements.txt",
+    "devCommand": "flask run --host=0.0.0.0",
+    "rootDirectory": null
+  }
+}
+
